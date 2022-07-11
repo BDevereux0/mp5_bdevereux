@@ -55,22 +55,32 @@ public class ScrabbleScore {
 
                 .collect(Collectors.toMap(e->e, e->wordScore(e)));
 
-        System.out.println(myMap.keySet());
-        System.out.println(myMap.get("Java"));
-
-        /*Stream.of(myMap).sorted((e1, e2)->{
-            if (e1.get(e1) > e2.get(e2))
+       /*Stream.of(myMap).sorted((e1, e2)->{
+            if (e1.get(e1) > e2.get(e2)) {
                 return 1;
-            else if (e1.get(e1) < e2.get(e2))
+            }else if (e1.get(e1) < e2.get(e2)) {
                 return -1;
-            else return 0;
-        })
+            }else
+                return 0;
+            })
                 .forEach(System.out::println);*/
 
-        myMap.entrySet().stream().
+        myMap.entrySet().stream()
+                .sorted((e1,e2)->{
+                    if (e1.getValue() < e2.getValue()){
+                        return 1;
+                    } else if (e1.getValue() > e2.getValue()) {
+                        return -1;
+                    }else
+                        return 0;
+                })
+                .limit(3)
+                .forEach(System.out::println);
+
+        /*myMap.entrySet().stream().
                 sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .limit(5)
-                .forEach(System.out::println);
+                .forEach(System.out::println);*/
 
 
        // myMap.forEach((k,v)-> System.out.println(k+":"+v));
