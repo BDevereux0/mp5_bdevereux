@@ -6,9 +6,6 @@ import java.util.stream.Stream;
 
 
 public class ScrabbleScore {
-
-
-
     public static int wordScore(String word){
         int score=0;
         char [] iterator = word.toLowerCase().toCharArray();
@@ -52,40 +49,24 @@ public class ScrabbleScore {
         String [] words = {"Java", "program", "list", "string", "unix", "hours", "syntax", "error"};
 
         Map<String, Integer> myMap = Stream.of(words)
-
                 .collect(Collectors.toMap(e->e, e->wordScore(e)));
 
-       /*Stream.of(myMap).sorted((e1, e2)->{
-            if (e1.get(e1) > e2.get(e2)) {
-                return 1;
-            }else if (e1.get(e1) < e2.get(e2)) {
-                return -1;
-            }else
-                return 0;
-            })
-                .forEach(System.out::println);*/
-
+        System.out.println("Top three words are:");
         myMap.entrySet().stream()
-                .sorted((e1,e2)->{
-                    if (e1.getValue() < e2.getValue()){
-                        return 1;
-                    } else if (e1.getValue() > e2.getValue()) {
-                        return -1;
-                    }else
-                        return 0;
-                })
-                .limit(3)
-                .forEach(System.out::println);
+                .sorted((e1,e2)->
+                    e2.getValue()-e1.getValue()
+                )
+                .limit(3).forEach(System.out::println);
 
-        /*myMap.entrySet().stream().
-                sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .limit(5)
-                .forEach(System.out::println);*/
+        double average = myMap.entrySet().stream()
+                .mapToInt(e->e.getValue()).average().getAsDouble();
 
+        System.out.println("Average scrabble value is " + average);
 
-       // myMap.forEach((k,v)-> System.out.println(k+":"+v));
+        System.out.println("words below average:"+
+        Arrays.toString(Stream.of(words).filter(e->wordScore(e) < average).toArray()));
 
-
-
+        System.out.println("words above average:"+
+                Arrays.toString(Stream.of(words).filter(e -> wordScore(e) > average).toArray()));
     }
 }
